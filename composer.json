@@ -1,0 +1,47 @@
+{
+    "name": "lotous/elibom-laravel",
+    "description": "Laravel Package for Elibom's PHP Client",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Elbert Tous",
+            "email": "contact@lotous.com.co",
+            "role": "Developer",
+            "homepage": "https://lotous.com.co"
+        }
+    ],
+    "support": {
+        "email": "contact@lotous.com.co"
+    },
+    "require": {
+        "php": "^5.6|^7.1",
+        "illuminate/support": "^5.2|^6.0|^7.0|^8.0",
+        "psr/http-client-implementation": "^1.0"
+    },
+    "require-dev": {
+        "guzzlehttp/guzzle": "^7.0",
+        "phpunit/phpunit": "^5.3|~6.0|~8.0",
+        "orchestra/testbench": "~3.0|^4.0|^5.0|^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lotous\\Elibom\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lotous\\Elibom\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lotous\\Elibom\\ElibomServiceProvider"
+            ],
+            "aliases": {
+                "Elibom": "Lotous\\Elibom\\Facade\\Elibom"
+            }
+        }
+    }
+}
