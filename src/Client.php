@@ -76,6 +76,8 @@
                 }
             }
 
+            $this->setHttpClient($client);
+
             $this->credentials = $credentials;
 
             $this->options = array_merge($this->options, $options);
