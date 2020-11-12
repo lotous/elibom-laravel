@@ -1,6 +1,7 @@
 # elibom-laravel
-Library for SMS Elibom
 
+Unofficial library to consume Elibom SMS rest api service
 
-##Instalation
+## Instalation
+composer required lotous/elibom-laravel
 
