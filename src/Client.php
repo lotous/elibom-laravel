@@ -13,6 +13,8 @@
     use Http\Client\HttpClient;
     use Psr\Http\Message\ResponseInterface;
     use Zend\Diactoros\Request;
+    use Lotous\Elibom\Client\Credentials\CredentialsInterface;
+    use Lotous\Elibom\Client\Credentials\Basic;
 
 
     class Client {
@@ -54,11 +56,11 @@
         /**
          * @var array
          */
-        protected $options = [];
+        protected $options = ['show_deprecations' => false];
 
         /**
          * APIClient constructor.
-         * @param CredentialsInterface $credentials
+         * @param CredentialsInterface | Basic $credentials
          * @param array $options
          * @param ClientInterface|null $client
          */
@@ -83,12 +85,27 @@
             $this->apiUrl = static::BASE_API;
             $this->apiVersion = static::BASE_API;
 
-            if (isset($options['base_api_url'])) {
-                $this->apiUrl = $options['base_api_url'];
+            if (isset($options['api_url'])  && !empty($options['api_version'])) {
+                $this->apiUrl = $options['api_url'];
             }
 
-            if (isset($options['base_api_version'])) {
-                $this->apiVersion = $options['base_api_version'];
+            if (isset($options['api_version']) && !empty($options['api_version'])) {
+                $this->apiVersion = $options['api_version'];
+            }
+
+            if (array_key_exists('show_deprecations', $this->options) && !$this->options['show_deprecations']) {
+                set_error_handler(
+                    function (
+                        int $errno,
+                        string $errstr,
+                        string $errfile,
+                        int $errline,
+                        array $errorcontext
+                    ) {
+                        return true;
+                    },
+                    E_USER_DEPRECATED
+                );
             }
 
         }

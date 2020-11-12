@@ -11,6 +11,7 @@ namespace Lotous\Elibom;
 use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Config\Repository as Config;
+use Lotous\Elibom\Client\Credentials\Basic;
 
 class ElibomServiceProvider extends ServiceProvider
 {
@@ -84,7 +85,7 @@ class ElibomServiceProvider extends ServiceProvider
         }
 
         // Get Client Options.
-        $options = array_diff_key($config->get('elibom'), ['api_key', 'api_secret', 'app']);
+        $options = array_diff_key($config->get('elibom'), ['api_key', 'api_secret', 'app', 'api_url', 'api_version']);
 
         $basicCredentials = null;
         if ($this->elibomConfigHas('api_key') && $this->elibomConfigHas('api_secret')) {
@@ -107,6 +108,7 @@ class ElibomServiceProvider extends ServiceProvider
                 'Please provide Elibom API credentials. Possible combinations: '
                 . join(", ", $possibleElibomKeys)
             );
+            return null;
         }
 
         $httpClient = null;
@@ -166,16 +168,13 @@ class ElibomServiceProvider extends ServiceProvider
     }
 
     /**
-     * Create a Basic credentials for client.
-     *
-     * @param string $key
-     * @param string $secret
-     *
-     * @return Client\Credentials\Basic
+     * @param $key
+     * @param $secret
+     * @return Basic
      */
     protected function createBasicCredentials($key, $secret)
     {
-        return new Client\Credentials\Basic($key, $secret);
+        return new Basic($key, $secret);
     }
 
     /**
