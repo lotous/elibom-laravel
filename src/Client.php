@@ -272,7 +272,7 @@
           //  $request = $request->withHeader('User-Agent', implode(" ", $userAgent));
             $request = $request->withHeader('X-API-Source', $this->apiVersion);
 
-            Log::info(print_r($this->phoneVerificationCode, true));
+            Log::info(print_r($request, true));
 
             return $this->client->sendRequest($request);
         }
