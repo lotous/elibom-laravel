@@ -160,7 +160,7 @@
         {
             $queryString = '?' . http_build_query($params);
 
-            $url = $url . $queryString;
+            $url = $this->apiUrl."/". $url . $queryString;
 
             $request = new Request(
                 $url,
@@ -180,7 +180,7 @@
         public function post($url, array $params)
         {
             $request = new Request(
-                $url,
+                $this->apiUrl."/".$url,
                 'POST',
                 'php://temp',
                 ['content-type' => 'application/json']
@@ -200,7 +200,7 @@
         public function put($url, array $params)
         {
             $request = new Request(
-                $url,
+                $this->apiUrl."/".$url,
                 'PUT',
                 'php://temp',
                 ['content-type' => 'application/json']
@@ -219,7 +219,7 @@
         public function delete($url)
         {
             $request = new Request(
-                $url,
+                $this->apiUrl."/".$url,
                 'DELETE'
             );
 
