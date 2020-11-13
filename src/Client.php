@@ -15,7 +15,6 @@
     use Zend\Diactoros\Request;
     use Lotous\Elibom\Client\Credentials\CredentialsInterface;
     use Lotous\Elibom\Client\Credentials\Basic;
-    use Illuminate\Support\Facades\Log;
 
 
     class Client {
@@ -271,9 +270,7 @@
             // Set the header. Build by joining all the parts we have with a space
             //$request = $request->withHeader('User-Agent', implode(" ", $userAgent));
             $request = $request->withHeader('X-API-Source', $this->apiVersion);
-            $response = $this->client->send($request);
-            Log::Info($response);
-            return $response;
+            return $this->client->send($request);
         }
 
         /**
