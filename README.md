@@ -2,7 +2,8 @@
 
 Unofficial library to consume Elibom SMS rest api service
 
-<a href="https://github.com/lotous/elibom-laravel/actions"><img src="https://github.com/lotous/elibom-laravel/workflows/tests/badge.svg" alt="Build Status"></a>
+
+<a href="https://github.com/lotous/elibom-laravel/actions"><img src="https://github.com/lotous/elibom-laravel/actions/workflows/laravel-test.yml/badge.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/lotous/elibom-laravel"><img src="https://img.shields.io/packagist/dt/lotous/elibom-laravel" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/lotous/elibom-laravel"><img src="https://img.shields.io/packagist/v/lotous/elibom-laravel" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/lotous/elibom-laravel"><img src="https://img.shields.io/packagist/l/lotous/elibom-laravel" alt="License"></a>
