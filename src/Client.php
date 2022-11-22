@@ -288,7 +288,7 @@
          * @return ResponseInterface
          */
         public function sendMessage($to, $txt, $campaign = null) {
-            $data = array("destinations" => $to, "text" => $txt);
+            $data = array("to" => $to, "text" => $txt);
             if (isset($campaign)) {
                 $data['campaign'] = $campaign;
             }
@@ -311,7 +311,7 @@
          * @return ResponseInterface
          */
         public function scheduleMessage($to, $txt, $date, $campaign = null) {
-            $data = array("destinations" => $to, "text" => $txt, "scheduleDate" => $date);
+            $data = array("to" => $to, "text" => $txt, "scheduleDate" => $date);
             if (isset($campaign)) {
                 $data['campaign'] = $campaign;
             }
