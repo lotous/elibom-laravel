@@ -15,8 +15,6 @@ return [
     'api_key'    => function_exists('env') ? env('ELIBOM_KEY', '') : '',
     'api_secret' => function_exists('env') ? env('ELIBOM_SECRET', '') : '',
 
-    'api_secret' => function_exists('env') ? env('ELIBOM_SECRET', '') : '',
-
    /*
     |--------------------------------------------------------------------------
     | Application Identifiers

@@ -2,6 +2,8 @@
 
 namespace Lotous\Elibom\Tests;
 
+use Lotous\Elibom\Client;
+
 class TestServiceProvider extends AbstractTestCase
 {
     /**
