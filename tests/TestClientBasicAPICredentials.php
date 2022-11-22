@@ -16,8 +16,8 @@ class TestClientBasicAPICredentials extends AbstractTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('api_key', 'my_api_key');
-        $app['config']->set('api_secret', 'my_secret');
+        $app['config']->set('elibom.api_key', 'my_api_key');
+        $app['config']->set('elibom.api_secret', 'my_secret');
     }
 
     /**

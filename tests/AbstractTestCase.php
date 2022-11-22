@@ -32,7 +32,7 @@ abstract class AbstractTestCase extends TestCase
     protected function getPackageAliases($app)
     {
         return [
-            'Nexmo' => \Lotous\Elibom\Facade\Elibom::class,
+            'Elibom' => \Lotous\Elibom\Facade\Elibom::class,
         ];
     }
 
