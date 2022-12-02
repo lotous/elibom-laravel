@@ -8,13 +8,13 @@
 
     namespace Lotous\Elibom;
 
-    use Psr\Http\Message\RequestInterface;
     use Psr\Http\Client\ClientInterface;
     use Http\Client\HttpClient;
     use Psr\Http\Message\ResponseInterface;
-    use Zend\Diactoros\Request;
+    use Laminas\Diactoros\Request;
     use Lotous\Elibom\Client\Credentials\CredentialsInterface;
     use Lotous\Elibom\Client\Credentials\Basic;
+   use PackageVersions\Versions;
 
 
     class Client {
@@ -66,12 +66,21 @@
          */
         public function __construct(CredentialsInterface $credentials, $options = array(), ClientInterface $client = null) {
 
+
             if (is_null($client)) {
                 // Since the user did not pass a client, try and make a client
-                // using the Guzzle 6 adapter or Guzzle 7
-                if (class_exists(\Http\Adapter\Guzzle6\Client::class)) {
+                // using the Guzzle 6 adapter or Guzzle 7 (depending on availability)
+                list($guzzleVersion) = explode('@', Versions::getVersion('guzzlehttp/guzzle'), 1);
+                $guzzleVersion = (float) $guzzleVersion;
+
+                if ($guzzleVersion >= 6.0 && $guzzleVersion < 7) {
+                    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+                    /** @noinspection PhpUndefinedNamespaceInspection */
+                    /** @noinspection PhpUndefinedClassInspection */
                     $client = new \Http\Adapter\Guzzle6\Client();
-                } elseif (class_exists(\GuzzleHttp\Client::class)) {
+                }
+
+                if ($guzzleVersion >= 7.0 && $guzzleVersion < 8.0) {
                     $client = new \GuzzleHttp\Client();
                 }
             }
@@ -278,7 +287,7 @@
          */
         protected function getVersion()
         {
-            return \PackageVersions\Versions::getVersion('lotous/elibom-laravel');
+            return Versions::getVersion('lotous/elibom-laravel');
         }
 
         /**
