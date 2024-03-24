@@ -15,7 +15,7 @@
         "email": "contact@lotous.com.co"
     },
     "require": {
-        "php": "^8.0",
+        "php": "^8.2",
         "laminas/laminas-diactoros": "^2.22",
         "composer/package-versions-deprecated": "^1.11",
         "php-http/httplug": "^2.3",
