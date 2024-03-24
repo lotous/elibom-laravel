@@ -8,12 +8,15 @@
 
 namespace Lotous\Elibom;
 
-
+use Composer\InstalledVersions;
+use Lotous\Elibom\Client\Credentials\Container;
+use Lotous\Elibom\Client\Credentials\SignatureSecret;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
 use Laminas\Diactoros\Request;
 use Lotous\Elibom\Client\Credentials\CredentialsInterface;
 use Lotous\Elibom\Client\Credentials\Basic;
+use RuntimeException;
 
 
 class Client
@@ -58,9 +61,8 @@ class Client
     protected $options = ['show_deprecations' => false];
 
     /**
-     * APIClient constructor.
-     * @param CredentialsInterface | Basic $credentials
-     * @param array $options
+     * @param CredentialsInterface $credentials
+     * @param $options
      * @param ClientInterface|null $client
      */
     public function __construct(CredentialsInterface $credentials, $options = array(), ClientInterface $client = null)
@@ -70,8 +72,8 @@ class Client
         if (is_null($client)) {
             // Since the user did not pass a client, try and make a client
             // using the Guzzle 6 adapter or Guzzle 7 (depending on availability)
-            list($guzzleVersion) = explode('@', \Composer\InstalledVersions::getVersion('guzzlehttp/guzzle'), 1);
-            $guzzleVersion = (float)$guzzleVersion;
+            list($guzzleVersion) = explode('@', InstalledVersions::getVersion('guzzlehttp/guzzle'), 1);
+            $guzzleVersion = (float) $guzzleVersion;
 
             if ($guzzleVersion >= 6.0 && $guzzleVersion < 7) {
                 /** @noinspection CallableParameterUseCaseInTypeContextInspection */
@@ -87,12 +89,16 @@ class Client
 
         $this->setHttpClient($client);
 
+        if (
+            !($credentials instanceof Container) &&
+            !($credentials instanceof Basic) &&
+            !($credentials instanceof SignatureSecret)
+        ) {
+            throw new RuntimeException('unknown credentials type: ' .  get_class($credentials));
+        }
+
         $this->credentials = $credentials;
-
         $this->options = array_merge($this->options, $options);
-
-        // Set the default URLs. Keep the constants for
-        // backwards compatibility
         $this->apiUrl = static::BASE_API;
         $this->apiVersion = static::BASE_API;
 
@@ -106,19 +112,12 @@ class Client
 
         if (array_key_exists('show_deprecations', $this->options) && !$this->options['show_deprecations']) {
             set_error_handler(
-                function (
-                    int    $errno,
-                    string $errstr,
-                    string $errfile,
-                    int    $errline,
-                    array  $errorcontext
-                ) {
+                static function () {
                     return true;
                 },
                 E_USER_DEPRECATED
             );
         }
-
     }
 
     /**
@@ -131,12 +130,7 @@ class Client
 
 
     /**
-     * Set the Http Client to used to make API requests.
-     *
-     * This allows the default http client to be swapped out for a HTTPlug compatible
-     * replacement.
-     *
-     * @param HttpClient $client
+     * @param ClientInterface $client
      * @return $this
      */
     public function setHttpClient(ClientInterface $client)
@@ -147,9 +141,7 @@ class Client
 
 
     /**
-     * Get the Http Client used to make API requests.
-     *
-     * @return HttpClient
+     * @return mixed
      */
     public function getHttpClient()
     {
@@ -158,11 +150,9 @@ class Client
 
 
     /**
-     * Takes a URL and a key=>value array to generate a GET PSR-7 request object
-     *
-     * @param string $url The URL to make a request to
-     * @param array $params Key=>Value array of data to use as the query string
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param $url
+     * @param array $params
+     * @return mixed
      */
     public function get($url, array $params = [])
     {
@@ -179,11 +169,9 @@ class Client
     }
 
     /**
-     * Takes a URL and a key=>value array to generate a POST PSR-7 request object
-     *
-     * @param string $url The URL to make a request to
-     * @param array $params Key=>Value array of data to send
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param $url
+     * @param array $params
+     * @return mixed
      */
     public function post($url, array $params)
     {
@@ -199,11 +187,9 @@ class Client
     }
 
     /**
-     * Takes a URL and a key=>value array to generate a PUT PSR-7 request object
-     *
-     * @param string $url The URL to make a request to
-     * @param array $params Key=>Value array of data to send
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param $url
+     * @param array $params
+     * @return mixed
      */
     public function put($url, array $params)
     {
@@ -219,10 +205,8 @@ class Client
     }
 
     /**
-     * Takes a URL and a key=>value array to generate a DELETE PSR-7 request object
-     *
-     * @param string $url The URL to make a request to
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param $url
+     * @return mixed
      */
     public function delete($url)
     {
@@ -236,12 +220,10 @@ class Client
 
 
     /**
-     * Wraps the HTTP Client, creates a new PSR-7 request adding authentication, signatures, etc.
-     *
-     * @param \Psr\Http\Message\RequestInterface $request
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param RequestInterface $request
+     * @return mixed
      */
-    public function send(\Psr\Http\Message\RequestInterface $request)
+    public function send(RequestInterface $request)
     {
         if ($this->credentials instanceof Basic) {
             $c = $this->credentials->asArray();
@@ -287,14 +269,14 @@ class Client
      */
     protected function getVersion()
     {
-        return Versions::getVersion('lotous/elibom-laravel');
+        return InstalledVersions::getVersion('lotous/elibom-laravel');
     }
 
     /**
      * @param $to
      * @param $txt
-     * @param null $campaign
-     * @return ResponseInterface
+     * @param $campaign
+     * @return mixed
      */
     public function sendMessage($to, $txt, $campaign = null)
     {
@@ -307,7 +289,7 @@ class Client
 
     /**
      * @param $deliveryToken
-     * @return ResponseInterface
+     * @return mixed
      */
     public function getDelivery($deliveryToken)
     {
@@ -318,8 +300,8 @@ class Client
      * @param $to
      * @param $txt
      * @param $date
-     * @param null $campaign
-     * @return ResponseInterface
+     * @param $campaign
+     * @return mixed
      */
     public function scheduleMessage($to, $txt, $date, $campaign = null)
     {
@@ -332,7 +314,7 @@ class Client
 
     /**
      * @param $scheduleId
-     * @return ResponseInterface
+     * @return mixed
      */
     public function getScheduledMessage($scheduleId)
     {
@@ -340,7 +322,7 @@ class Client
     }
 
     /**
-     * @return ResponseInterface
+     * @return mixed
      */
     public function getScheduledMessages()
     {
@@ -349,7 +331,7 @@ class Client
 
     /**
      * @param $scheduleId
-     * @return ResponseInterface
+     * @return mixed
      */
     public function unscheduleMessage($scheduleId)
     {
@@ -374,7 +356,7 @@ class Client
     }
 
     /**
-     * @return ResponseInterface
+     * @return mixed
      */
     public function getAccount()
     {

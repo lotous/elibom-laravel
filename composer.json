@@ -16,13 +16,11 @@
     },
     "require": {
         "php": "^8.2",
-        "laminas/laminas-diactoros": "^2.22",
-        "composer/package-versions-deprecated": "^1.11",
-        "php-http/httplug": "^2.3",
-        "ext-json": "*"
+        "ext-json": "*",
+        "laminas/laminas-diactoros": "^3.3"
     },
     "require-dev": {
-        "guzzlehttp/guzzle": "^7.0",
+        "guzzlehttp/guzzle": "^7.8",
         "phpunit/phpunit" : "^9.5|^10.5|^11.0.1",
         "orchestra/testbench": "^7.0|^8.0|^9.0"
     },

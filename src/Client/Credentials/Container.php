@@ -12,8 +12,7 @@ class Container extends AbstractCredentials implements CredentialsInterface
 {
     protected $types = [
         Basic::class,
-        SignatureSecret::class,
-        Keypair::class
+        SignatureSecret::class
     ];
 
     protected $credentials;
@@ -41,11 +40,15 @@ class Container extends AbstractCredentials implements CredentialsInterface
 
     protected function getType(CredentialsInterface $credential)
     {
-        foreach ($this->types as $type) {
-            if ($credential instanceof $type) {
-                return $type;
-            }
+        if ($credential instanceof Basic) {
+            return Basic::class;
         }
+
+        if ($credential instanceof SignatureSecret) {
+            return SignatureSecret::class;
+        }
+
+        throw new \RuntimeException('credential type not supported for elibom client library');
     }
 
     public function get($type)
@@ -62,8 +65,4 @@ class Container extends AbstractCredentials implements CredentialsInterface
         return isset($this->credentials[$type]);
     }
 
-    public function generateJwt($claims)
-    {
-        return $this->credentials[Keypair::class]->generateJwt($claims);
-    }
 }
