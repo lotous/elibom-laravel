@@ -9,11 +9,8 @@ use Lotous\Elibom\Client;
 abstract class AbstractTestCase extends TestCase
 {
     /**
-     * Get package providers.
-     *
-     * @param  \Illuminate\Foundation\Application $app
-     *
-     * @return array
+     * @param $app
+     * @return string[]
      */
     protected function getPackageProviders($app)
     {
@@ -23,11 +20,8 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * Get package aliases.
-     *
-     * @param  \Illuminate\Foundation\Application $app
-     *
-     * @return array
+     * @param $app
+     * @return string[]
      */
     protected function getPackageAliases($app)
     {
@@ -37,13 +31,11 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * Gets the property of an object of a class.
-     *
-     * @param string $class
-     * @param string $property
-     * @param mixed  $object
-     *
+     * @param $class
+     * @param $property
+     * @param $object
      * @return mixed
+     * @throws \ReflectionException
      */
     public function getClassProperty($class, $property, $object)
     {
@@ -55,7 +47,7 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * Returns a list of classes we should attempt to create
+     * @return array[]
      */
     public function classNameProvider()
     {

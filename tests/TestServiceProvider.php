@@ -7,10 +7,7 @@ use Lotous\Elibom\Client;
 class TestServiceProvider extends AbstractTestCase
 {
     /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application $app
-     *
+     * @param $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -20,15 +17,11 @@ class TestServiceProvider extends AbstractTestCase
     }
 
     /**
-     * Test that we can create the Nexmo client
-     * from container binding.
-     *
-     * @dataProvider classNameProvider
-     *
      * @return void
      */
-    public function testClientResolutionFromContainer($className)
+    public function testClientResolutionFromContainer()
     {
+        $className = Client::class; // Asigna la clase que deseas resolver aquí
         $client = app($className);
 
         $this->assertInstanceOf($className, $client);

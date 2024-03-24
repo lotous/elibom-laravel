@@ -8,10 +8,7 @@ use Lotous\Elibom\Client\Credentials\Basic;
 class TestClientBasicAPICredentials extends AbstractTestCase
 {
     /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application $app
-     *
+     * @param $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -21,10 +18,8 @@ class TestClientBasicAPICredentials extends AbstractTestCase
     }
 
     /**
-     * Test that our Nexmo client is created with
-     * the Basic API credentials.
-     *
      * @return void
+     * @throws \ReflectionException
      */
     public function testClientCreatedWithBasicAPICredentials()
     {
